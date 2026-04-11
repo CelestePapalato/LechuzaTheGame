@@ -10,6 +10,8 @@ public class RaycastCollision : MonoBehaviour
     [SerializeField] private LayerMask collisionMask = ~0;
     [SerializeField] private int maxResolutionIterations = 6;
 
+    public bool IsGrounded { get; private set; }
+
     private Rigidbody2D rb;
 
     private static readonly Vector2[] CardinalDirections =
@@ -56,5 +58,20 @@ public class RaycastCollision : MonoBehaviour
             rb.MovePosition(pos + correction);
             pos = rb.position;
         }
+
+        RefreshGrounded(pos);
+    }
+
+    private void RefreshGrounded(Vector2 pos)
+    {
+        Vector2 castOrigin = pos + rayOriginOffset;
+        RaycastHit2D hit = Physics2D.Raycast(castOrigin, Vector2.down, verticalRayLength, collisionMask);
+        if (!hit.collider || hit.collider.isTrigger || hit.collider.attachedRigidbody == rb)
+        {
+            IsGrounded = false;
+            return;
+        }
+
+        IsGrounded = true;
     }
 }
