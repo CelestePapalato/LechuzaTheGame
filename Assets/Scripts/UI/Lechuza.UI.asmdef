@@ -1,0 +1,16 @@
+{
+    "name": "Lechuza.UI",
+    "rootNamespace": "",
+    "references": [
+        "GUID:c108f6aede33ac64b9375cfeed77687f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

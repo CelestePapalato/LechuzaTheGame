@@ -1,15 +1,13 @@
 using UnityEngine;
 
-public class HealthbarIcon : MonoBehaviour
+public class AnimatedIcon : MonoBehaviour, IIcon
 {
-    [SerializeField]
-    private bool startsOn = false;
     [SerializeField]
     private Animator animator;
     [SerializeField]
     private string animationBoolean = "on";
 
-    private bool isOn = false;
+    private bool isOn = true;
     public bool IsOn
     {
         get => isOn;
@@ -25,15 +23,13 @@ public class HealthbarIcon : MonoBehaviour
 
     private void Awake()
     {
-        if (animator)
-        {
+        if (!animator)
             animator = GetComponent<Animator>();
-        }
     }
 
-    void Start()
+    private void OnEnable()
     {
-        IsOn = startsOn;
+        UpdateIconState();
     }
 
     void UpdateIconState()
