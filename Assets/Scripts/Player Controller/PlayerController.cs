@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private PlatformerMovement movement;
 
+    private bool dashWasHeldLastFrame = false;
+
     private void Awake()
     {
         if(!movement)
@@ -16,9 +18,13 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        bool dashIsHeld = playerInputSO.DashInput;
+        bool dashPressedThisFrame = dashIsHeld && !dashWasHeldLastFrame;
+        dashWasHeldLastFrame = dashIsHeld;
+
         movement.SetMoveInput(
             playerInputSO.MovementInput.x,
             playerInputSO.JumpInput,
-            playerInputSO.DashInput);
+            dashPressedThisFrame);
     }
 }
