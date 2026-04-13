@@ -1,20 +1,24 @@
 using UnityEngine;
+using CustomInputSystem;
 
-[RequireComponent(typeof(PlatformerMovement))]
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField]
+    private PlayerInputSO playerInputSO;
+    [SerializeField]
     private PlatformerMovement movement;
 
     private void Awake()
     {
-        movement = GetComponent<PlatformerMovement>();
+        if(!movement)
+            movement = GetComponentInChildren<PlatformerMovement>();
     }
 
     private void Update()
     {
         movement.SetMoveInput(
-            Input.GetAxisRaw("Horizontal"),
-            Input.GetButtonDown("Jump"),
-            Input.GetKeyDown(KeyCode.LeftShift));
+            playerInputSO.MovementInput.x,
+            playerInputSO.JumpInput,
+            playerInputSO.DashInput);
     }
 }
