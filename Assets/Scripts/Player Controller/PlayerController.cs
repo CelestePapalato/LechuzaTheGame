@@ -1,20 +1,30 @@
 using UnityEngine;
+using CustomInputSystem;
 
-[RequireComponent(typeof(PlatformerMovement))]
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField]
+    private PlayerInputSO playerInputSO;
+    [SerializeField]
     private PlatformerMovement movement;
+
+    private bool dashWasHeldLastFrame = false;
 
     private void Awake()
     {
-        movement = GetComponent<PlatformerMovement>();
+        if(!movement)
+            movement = GetComponentInChildren<PlatformerMovement>();
     }
 
     private void Update()
     {
+        bool dashIsHeld = playerInputSO.DashInput;
+        bool dashPressedThisFrame = dashIsHeld && !dashWasHeldLastFrame;
+        dashWasHeldLastFrame = dashIsHeld;
+
         movement.SetMoveInput(
-            Input.GetAxisRaw("Horizontal"),
-            Input.GetButtonDown("Jump"),
-            Input.GetKeyDown(KeyCode.LeftShift));
+            playerInputSO.MovementInput.x,
+            playerInputSO.JumpInput,
+            dashPressedThisFrame);
     }
 }
