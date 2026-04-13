@@ -1,0 +1,18 @@
+{
+    "name": "Lechuza.Player",
+    "rootNamespace": "",
+    "references": [
+        "GUID:67ba76afe70bd40458528cd01e9daa89",
+        "GUID:4b891f172aeeb17419b50981bdb6b650",
+        "GUID:8f3e2c1b0a9d4e5f8670b2a4c6d8e0f1"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
