@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class GlowShaderController : MonoBehaviour
 {
     [SerializeField] private Image targetImage;
+    [SerializeField] private Material overrideMaterial;
 
     public string glowRadiusProperty = "_GlowRadius";
     public string glowStrengthProperty = "_GlowStrength";
@@ -48,7 +49,10 @@ public class GlowShaderController : MonoBehaviour
 
         if (targetImage.material != null)
         {
-            materialInstance = new Material(targetImage.material);
+            if(overrideMaterial != null)
+                materialInstance = new Material(overrideMaterial);
+            else
+                materialInstance = new Material(targetImage.material);
             targetImage.material = materialInstance;
         }
     }

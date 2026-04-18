@@ -127,6 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetImage: {fileID: 6729046848126115360}
+  overrideMaterial: {fileID: 2100000, guid: 79858a6b66554104785b2df6ba2eb20d, type: 2}
   glowRadiusProperty: _GlowRadius
   glowStrengthProperty: _GlowStrength
   glowColorProperty: _GlowColor
