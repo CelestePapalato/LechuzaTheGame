@@ -29,6 +29,7 @@ Shader "UI/GlowEffect"
             "RenderType"="Transparent"
             "PreviewType"="Plane"
             "CanUseSpriteAtlas"="True"
+            "RenderPipeline"="UniversalPipeline"
         }
         
         Stencil

@@ -10,10 +10,14 @@ public class PlayerController : MonoBehaviour
 
     private bool dashWasHeldLastFrame = false;
 
+    Health health;
+    public Health Health => health;
+
     private void Awake()
     {
         if(!movement)
             movement = GetComponentInChildren<PlatformerMovement>();
+        health = GetComponentInChildren<Health>();
     }
 
     private void Update()

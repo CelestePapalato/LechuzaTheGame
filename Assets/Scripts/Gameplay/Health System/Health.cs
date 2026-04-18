@@ -17,9 +17,13 @@ public class Health : MonoBehaviour
     public UnityAction<int, int> OnHeal;
     public UnityAction OnDeath;
 
-    private void Start()
+    private void Awake()
     {
         currentHealth = maxHealth;
+    }
+
+    private void Start()
+    {
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
     }
 

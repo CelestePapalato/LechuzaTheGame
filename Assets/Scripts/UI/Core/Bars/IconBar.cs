@@ -6,23 +6,15 @@ public class IconBar : MonoBehaviour
     [SerializeField] private Transform poolParent;
     [SerializeField, Min(0)] private int poolCapacity = 5;
 
-    private const int HardcodedCurrent = 3;
-    private const int HardcodedMax = 5;
-
     private GameObject[] _instances;
     private IIcon[] _icons;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         BuildPool();
     }
 
-    private void Start()
-    {
-        ApplyBarState(HardcodedCurrent, HardcodedMax);
-    }
-
-    private void BuildPool()
+    protected void BuildPool()
     {
         int count = Mathf.Max(0, poolCapacity);
         _instances = new GameObject[count];

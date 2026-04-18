@@ -1,10 +1,8 @@
 {
-    "name": "Lechuza.Player",
+    "name": "Lechuza.Gameplay",
     "rootNamespace": "",
     "references": [
-        "GUID:67ba76afe70bd40458528cd01e9daa89",
-        "GUID:4b891f172aeeb17419b50981bdb6b650",
-        "GUID:8f3e2c1b0a9d4e5f8670b2a4c6d8e0f1",
+        "GUID:fac80c316af38d84e9bc8364105ceac9",
         "GUID:acced144fc8c84c45b7222e570dc8121"
     ],
     "includePlatforms": [],

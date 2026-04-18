@@ -6,7 +6,7 @@ public class Damage : MonoBehaviour
     private int damageAmount = 10;
     
     private int multiplier = 1;
-    private Collider damageCollider;
+    private Collider2D damageCollider;
 
     public int DamageAmount => damageAmount * multiplier;
 
@@ -18,12 +18,12 @@ public class Damage : MonoBehaviour
 
     private void Awake()
     {
-        damageCollider = GetComponent<Collider>();
+        damageCollider = GetComponent<Collider2D>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        Health health = other.GetComponent<Health>();
+        Health health = other.attachedRigidbody.GetComponentInChildren<Health>();
         if (health != null)
         {
             health.TakeDamage(damageAmount);

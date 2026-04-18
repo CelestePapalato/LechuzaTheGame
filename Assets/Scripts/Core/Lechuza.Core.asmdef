@@ -1,9 +1,7 @@
 {
-    "name": "Lechuza.UI.Core",
+    "name": "Lechuza.Core",
     "rootNamespace": "",
-    "references": [
-        "GUID:fac80c316af38d84e9bc8364105ceac9"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

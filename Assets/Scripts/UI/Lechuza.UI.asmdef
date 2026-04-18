@@ -2,7 +2,8 @@
     "name": "Lechuza.UI",
     "rootNamespace": "",
     "references": [
-        "GUID:c108f6aede33ac64b9375cfeed77687f"
+        "GUID:c108f6aede33ac64b9375cfeed77687f",
+        "GUID:fac80c316af38d84e9bc8364105ceac9"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
