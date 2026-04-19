@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlatformerMovement : MonoBehaviour
@@ -33,6 +34,7 @@ public class PlatformerMovement : MonoBehaviour
 
     private readonly Dictionary<int, ContactPoint2D[]> puntosDeContacto = new Dictionary<int, ContactPoint2D[]>();
 
+    public Vector2 CurrentVelocity => rb?.linearVelocity ?? Vector2.zero;
     public bool OnFloor { get; private set; }
 
     private Vector2 walkVelocity;
@@ -47,6 +49,29 @@ public class PlatformerMovement : MonoBehaviour
     private bool dashQueued;
 
     public CapsuleCollider2D GroundCollider => groundCollider;
+
+    private UnityAction OnDash;
+    private UnityAction OnJump;
+
+    public void SubscribeToDashEvent(UnityAction func)
+    {
+        OnDash += func;
+    }
+
+    public void UnsubscribeFromDashEvent(UnityAction func)
+    {
+        OnDash -= func;
+    }
+
+    public void SubscribeToJumpEvent(UnityAction func)
+    {
+        OnJump += func;
+    }
+
+    public void UnsubscribeFromJumpEvent(UnityAction func)
+    {
+        OnJump -= func;
+    }
 
     public void SetGroundCollider(CapsuleCollider2D collider)
     {
@@ -173,6 +198,7 @@ public class PlatformerMovement : MonoBehaviour
         {
             dashTimeLeft = dashDuration;
             dashVelocity = new Vector2(facing * dashSpeed, 0f);
+            OnDash?.Invoke();
         }
         dashQueued = false;
     }
@@ -184,7 +210,11 @@ public class PlatformerMovement : MonoBehaviour
 
         bool jumped = jumpQueued && grounded;
         if (jumped)
+        {
             walkVelocity.y = GetJumpVelocity();
+            OnJump?.Invoke();
+        }
+
         jumpQueued = false;
 
         float vyForGravity = walkVelocity.y + impulseVelocity.y;
