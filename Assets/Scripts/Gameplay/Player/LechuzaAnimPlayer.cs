@@ -11,13 +11,13 @@ public class LechuzaAnimPlayer : MonoBehaviour
     [SerializeField]
     private Health playerHealth;
 
-    private string groundedHash = "isGrounded";
-    private string jumpHash = "Jump";
-    private string dashHash = "Dash";
-    private string deathHash = "Death";
-    private string damageHash = "Damage";
-    private string speedXHash = "SpeedX";
-    private string speedYHash = "SpeedY";
+    private readonly string groundedHash = "isGrounded";
+    private readonly string jumpHash = "Jump";
+    private readonly string dashHash = "Dash";
+    private readonly string deathHash = "Death";
+    private readonly string damageHash = "Damage";
+    private readonly string speedXHash = "SpeedX";
+    private readonly string speedYHash = "SpeedY";
 
     private bool isDead = false;
 

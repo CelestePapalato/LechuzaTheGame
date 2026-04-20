@@ -4,6 +4,7 @@ using UnityEngine;
 public enum GameBindableKey
 {
     PlayerHealth = 0,
+    PlayerLight = 1,
 }
 
 public static class GameBindableRegistry
