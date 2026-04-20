@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class GameBindableProvider : MonoBehaviour
 {
-    [SerializeField] private PlayerState playerState;
-
     private void Awake()
     {
         GameBindableRegistry.SetResolver(Resolve);
@@ -16,12 +14,11 @@ public class GameBindableProvider : MonoBehaviour
 
     private object Resolve(GameBindableKey key)
     {
-        switch (key)
+        return key switch
         {
-            case GameBindableKey.PlayerHealth:
-                return playerState.health;
-            default:
-                return null;
-        }
+            GameBindableKey.PlayerHealth => PlayerState.Instance.health,
+            GameBindableKey.PlayerLight => PlayerState.Instance.light,
+            _ => null,
+        };
     }
 }

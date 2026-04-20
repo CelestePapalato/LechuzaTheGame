@@ -190,8 +190,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f170f8d32b9bf24c88ff2beb3e3680d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: {fileID: 2007037876}
   state: {fileID: 77062515}
+  health: {fileID: 2007037876}
+  light: {fileID: 620749766}
 --- !u!1 &206405735
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,12 +340,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 216681782}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a75cf394e5e5b34da1ebe36a982c741, type: 3}
+  m_Script: {fileID: 11500000, guid: eaa1313e916800d4599af33713920c6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   iconPrefab: {fileID: 6214914650079385735, guid: 8d98ef43034ac6f4e884cba02f638aa7, type: 3}
   poolParent: {fileID: 216681783}
-  poolCapacity: 5
+  poolCapacity: 10
+  sourceKey: 1
 --- !u!1 &300853827
 GameObject:
   m_ObjectHideFlags: 0
@@ -646,6 +648,7 @@ GameObject:
   - component: {fileID: 620749762}
   - component: {fileID: 620749764}
   - component: {fileID: 620749765}
+  - component: {fileID: 620749766}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -738,6 +741,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a218bee8b00a4a44699119bbbe8dc989, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &620749766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 620749760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ac7ae84439be534abc51086884fb908, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingLight: 0
+  maxLight: 5
+  regenRate: 1
+  useRegen: 1
 --- !u!1 &692638646
 GameObject:
   m_ObjectHideFlags: 0
@@ -1430,7 +1449,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 2007037878}
   sprite: {fileID: 2007037879}
-  isFlipped: 0
   playerMovement: {fileID: 2007037872}
   playerHealth: {fileID: 2007037876}
 --- !u!1 &2103357559
