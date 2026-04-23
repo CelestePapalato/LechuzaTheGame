@@ -177,7 +177,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1040aad4886c9ba449baca95adc089b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerState: {fileID: 77062515}
 --- !u!114 &77062518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,6 +203,7 @@ GameObject:
   - component: {fileID: 206405736}
   - component: {fileID: 206405738}
   - component: {fileID: 206405737}
+  - component: {fileID: 206405739}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -268,6 +268,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 206405735}
   m_CullTransparentMesh: 1
+--- !u!114 &206405739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 206405735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d69d95a6245c44b93d4d3e93bf4a36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lowestFalloffValue: 0.1
+  highestFalloffValue: 0.5
+  falloffProperty: _Falloff
 --- !u!1 &216681782
 GameObject:
   m_ObjectHideFlags: 0
@@ -647,7 +662,6 @@ GameObject:
   - component: {fileID: 620749763}
   - component: {fileID: 620749762}
   - component: {fileID: 620749764}
-  - component: {fileID: 620749765}
   - component: {fileID: 620749766}
   m_Layer: 0
   m_Name: Player
@@ -729,18 +743,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInputSO: {fileID: 11400000, guid: 3fe79e80598ef324eaed7c3a44c9f504, type: 2}
---- !u!114 &620749765
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 620749760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a218bee8b00a4a44699119bbbe8dc989, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &620749766
 MonoBehaviour:
   m_ObjectHideFlags: 0
