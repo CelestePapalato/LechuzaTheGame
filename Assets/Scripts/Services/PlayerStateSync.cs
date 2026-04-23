@@ -4,7 +4,7 @@ public class PlayerHealthSync : MonoBehaviour
 {
     [SerializeField] private PlayerState state;
     [SerializeField] private Health health;
-    [SerializeField] private new Light light;
+    [SerializeField] private new LightReservoir light;
 
     private void OnEnable()
     {

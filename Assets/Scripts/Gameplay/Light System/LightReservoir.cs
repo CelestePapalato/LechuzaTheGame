@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Light : MonoBehaviour
+public class LightReservoir : MonoBehaviour
 {
     [SerializeField]
     private int startingLight = 0;
