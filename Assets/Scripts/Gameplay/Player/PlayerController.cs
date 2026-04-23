@@ -22,6 +22,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (PlayerState.isDead)
+        {
+            movement.SetMoveInput(0, false, false);
+            return;
+        }
+
         bool dashIsHeld = playerInputSO.DashInput;
         bool dashPressedThisFrame = dashIsHeld && !dashWasHeldLastFrame;
         dashWasHeldLastFrame = dashIsHeld;

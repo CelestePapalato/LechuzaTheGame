@@ -10,6 +10,8 @@ public class PlayerState : MonoBehaviour
 
     public static UnityAction<int, int> OnLightChange;
 
+    public static bool isDead => Instance == null || Instance.health.Current <= 0;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
