@@ -1070,8 +1070,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a1bd80e54158ac449af0d67cb8a0276, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  regenerateLight: 0
-  healAmount: 0
+  regenerateLight: 1
+  healAmount: 2
 --- !u!61 &1268118431
 BoxCollider2D:
   m_ObjectHideFlags: 0
