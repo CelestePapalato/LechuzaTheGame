@@ -29,7 +29,7 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (IsInvincible) return;
+        if (IsInvincible || currentHealth <= 0) return;
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         OnHealthChanged?.Invoke(currentHealth, maxHealth);

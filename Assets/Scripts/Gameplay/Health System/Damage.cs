@@ -3,10 +3,10 @@ using UnityEngine;
 public class Damage : MonoBehaviour
 {
     [SerializeField]
-    private int damageAmount = 10;
+    protected int damageAmount = 10;
     
-    private int multiplier = 1;
-    private Collider2D damageCollider;
+    protected int multiplier = 1;
+    protected Collider2D damageCollider;
 
     public int DamageAmount => damageAmount * multiplier;
 
@@ -16,12 +16,12 @@ public class Damage : MonoBehaviour
         set => multiplier = Mathf.Max(1, value);
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         damageCollider = GetComponent<Collider2D>();
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         Health health = other.attachedRigidbody.GetComponentInChildren<Health>();
         if (health != null)
@@ -30,7 +30,7 @@ public class Damage : MonoBehaviour
         }
     }
 
-    public void EnableDamage(bool enable)
+    public virtual void EnableDamage(bool enable)
     {
         damageCollider.enabled = enable;
     }
