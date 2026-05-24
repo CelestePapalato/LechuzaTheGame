@@ -1637,7 +1637,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 6
-  IsInvincible: 0
+  invincibilityTime: 0.8
 --- !u!95 &2007037878 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 1550634727481500100, guid: 1a2c29897e07a584ebdc560b533b2d5d, type: 3}
