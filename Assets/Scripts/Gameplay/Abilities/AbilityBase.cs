@@ -1,19 +1,23 @@
-using UnityEngine;
-
-public abstract class AbilityBase : MonoBehaviour, IAbility
+public abstract class AbilityBase : IAbility
 {
-    [SerializeField] protected LightReservoir lightReservoir;
-    [SerializeField] protected int lightCost = 1;
+    protected readonly IAbilityUser user;
+    protected readonly int lightCost;
+
+    protected AbilityBase(IAbilityUser user, int lightCost)
+    {
+        this.user = user;
+        this.lightCost = lightCost;
+    }
 
     public virtual bool CanExecute()
     {
-        return lightReservoir != null && lightReservoir.HasLight(lightCost);
+        return user?.LightReservoir != null && user.LightReservoir.HasLight(lightCost);
     }
 
     public abstract void Execute();
 
     protected bool TryConsumeLight()
     {
-        return lightReservoir != null && lightReservoir.TryConsume(lightCost);
+        return user?.LightReservoir != null && user.LightReservoir.TryConsume(lightCost);
     }
 }
