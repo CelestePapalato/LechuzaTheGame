@@ -49,6 +49,7 @@ public class PlatformerMovement : MonoBehaviour
     private bool dashQueued;
 
     public CapsuleCollider2D GroundCollider => groundCollider;
+    public float Facing => facing;
 
     private UnityAction OnDash;
     private UnityAction OnJump;
@@ -82,6 +83,14 @@ public class PlatformerMovement : MonoBehaviour
     public void AddImpulse(Vector2 worldDeltaVelocity)
     {
         impulseVelocity += worldDeltaVelocity;
+    }
+
+    public void Teleport(Vector2 position)
+    {
+        rb.position = position;
+        walkVelocity = Vector2.zero;
+        dashVelocity = Vector2.zero;
+        impulseVelocity = Vector2.zero;
     }
 
     public void SetMoveInput(float horizontal, bool jumpPressedThisFrame)

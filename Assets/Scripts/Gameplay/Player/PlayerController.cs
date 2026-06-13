@@ -9,18 +9,29 @@ public class PlayerController : MonoBehaviour, IAbilityUser
     [SerializeField]
     private PlatformerMovement movement;
     [SerializeField]
+    private Transform lightAnchorPivot;
+    [SerializeField]
     private LightReservoir lightReservoir;
+
+    [Header("Abilities")]
+    [SerializeField]
+    private LightAnchorProjectile anchorPrefab;
+
     [Header("Cooldowns")]
     [SerializeField]
     float dashCooldownLength = .7f;
+    [SerializeField]
+    float anchorCooldownLength = 1f;
 
     Health health;
     public Health Health => health;
 
     private AbilityHandler abilityHandler;
 
-    public LightReservoir LightReservoir { get => lightReservoir; }
-    public PlatformerMovement Movement { get => movement; }
+    public Transform LightAnchorPivot => lightAnchorPivot;
+    public LightAnchorProjectile AnchorPrefab => anchorPrefab;
+    public LightReservoir LightReservoir => lightReservoir;
+    public PlatformerMovement Movement => movement;
 
     private void Awake()
     {
@@ -28,19 +39,22 @@ public class PlayerController : MonoBehaviour, IAbilityUser
             movement = GetComponentInChildren<PlatformerMovement>();
         health = GetComponentInChildren<Health>();
 
-        abilityHandler = new AbilityHandler(this, this, dashCooldownLength);
+        abilityHandler = new AbilityHandler(this, this, dashCooldownLength, anchorCooldownLength);
     }
 
     private void OnEnable()
     {
         health.OnDeath += HandleDeath;
         playerInputSO.OnDash += HandleDash;
+        playerInputSO.OnAnchor += HandleAnchor;
     }
 
     private void OnDisable()
     {
         health.OnDeath -= HandleDeath;
         playerInputSO.OnDash -= HandleDash;
+        playerInputSO.OnAnchor -= HandleAnchor;
+        abilityHandler.Cleanup();
         StopAllCoroutines();
     }
 
@@ -50,8 +64,7 @@ public class PlayerController : MonoBehaviour, IAbilityUser
 
         movement.SetMoveInput(
             playerInputSO.MovementInput.x,
-            playerInputSO.JumpInput
-            );
+            playerInputSO.JumpInput);
     }
 
     private void HandleDeath()
@@ -63,5 +76,11 @@ public class PlayerController : MonoBehaviour, IAbilityUser
     {
         if (PlayerState.isDead || !isPressed) return;
         abilityHandler.HandleDash();
+    }
+
+    private void HandleAnchor(bool isPressed)
+    {
+        if (PlayerState.isDead || !isPressed) return;
+        abilityHandler.HandleAnchor();
     }
 }
