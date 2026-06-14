@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Luz
-  m_Shader: {fileID: 4800000, guid: a162b3878bf451243a0529e72934b3f4, type: 3}
+  m_Shader: {fileID: 4800000, guid: 383f4ef4734af384ba5c57e6254d4171, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -71,6 +71,8 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _LightCount: 0
+    - _LightSmoothing: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3145398419360747365}
   - component: {fileID: 8600592259021380569}
   - component: {fileID: 7408571841702939342}
+  - component: {fileID: 6388486006893159922}
   m_Layer: 0
   m_Name: Anchor Test
   m_TagString: Untagged
@@ -102,3 +103,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 4
   lifetime: 2.5
+--- !u!114 &6388486006893159922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8017514853573489140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3cf5e67e52d4e646bf2572c72bdf540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.1
