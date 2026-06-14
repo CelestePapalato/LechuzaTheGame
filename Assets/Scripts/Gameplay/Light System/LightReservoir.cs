@@ -51,4 +51,19 @@ public class LightReservoir : MonoBehaviour
         currentLight = Mathf.Min(currentLight + 1, maxLight);
         OnLightChanged?.Invoke(currentLight, maxLight);
     }
+
+    public bool HasLight(int amount)
+    {
+        return currentLight >= amount;
+    }
+
+    public bool TryConsume(int amount)
+    {
+        if (HasLight(amount))
+        {
+            Consume(amount);
+            return true;
+        }
+        return false;
+    }
 }

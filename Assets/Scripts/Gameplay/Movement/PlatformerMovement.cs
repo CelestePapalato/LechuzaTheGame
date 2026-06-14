@@ -32,7 +32,7 @@ public class PlatformerMovement : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    private readonly Dictionary<int, ContactPoint2D[]> puntosDeContacto = new Dictionary<int, ContactPoint2D[]>();
+    private readonly Dictionary<int, ContactPoint2D[]> puntosDeContacto = new();
 
     public Vector2 CurrentVelocity => rb?.linearVelocity ?? Vector2.zero;
     public bool OnFloor { get; private set; }
@@ -49,6 +49,7 @@ public class PlatformerMovement : MonoBehaviour
     private bool dashQueued;
 
     public CapsuleCollider2D GroundCollider => groundCollider;
+    public float Facing => facing;
 
     private UnityAction OnDash;
     private UnityAction OnJump;
@@ -84,13 +85,24 @@ public class PlatformerMovement : MonoBehaviour
         impulseVelocity += worldDeltaVelocity;
     }
 
-    public void SetMoveInput(float horizontal, bool jumpPressedThisFrame, bool dashPressedThisFrame)
+    public void Teleport(Vector2 position)
+    {
+        rb.position = position;
+        walkVelocity = Vector2.zero;
+        dashVelocity = Vector2.zero;
+        impulseVelocity = Vector2.zero;
+    }
+
+    public void SetMoveInput(float horizontal, bool jumpPressedThisFrame)
     {
         inputHorizontal = horizontal;
         if (jumpPressedThisFrame)
             jumpQueued = true;
-        if (dashPressedThisFrame)
-            dashQueued = true;
+    }
+
+    public void TriggerDash()
+    {
+        dashQueued = true;
     }
 
     private void Awake()

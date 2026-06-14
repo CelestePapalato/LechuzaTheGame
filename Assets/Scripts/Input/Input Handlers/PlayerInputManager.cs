@@ -19,7 +19,6 @@ namespace CustomInputSystem
         private void OnMove(InputValue inputValue)
         {
             if (!playerInputSO) { Debug.LogError("PlayerInputSO is null. Can't interact."); return; }
-            Vector2 stick = inputValue.Get<Vector2>();
             playerInputSO.MovementInput = inputValue.Get<Vector2>();
         }
 
@@ -39,6 +38,12 @@ namespace CustomInputSystem
         {
             if (!playerInputSO) { Debug.LogError("PlayerInputSO is null. Can't interact."); return; }
             playerInputSO.InteractInput = inputValue.isPressed;
+        }
+
+        void OnAnchor(InputValue inputValue)
+        {
+            if (!playerInputSO) { Debug.LogError("PlayerInputSO is null. Can't interact."); return; }
+            playerInputSO.AnchorInput = inputValue.isPressed;
         }
     }
 }

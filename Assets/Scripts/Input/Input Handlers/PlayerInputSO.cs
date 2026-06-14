@@ -17,11 +17,13 @@ namespace CustomInputSystem
         private bool _dashInput = false;
         private bool _jumpInput = false;
         private bool _interactInput = false;
+        private bool _anchorInput = false;
 
         public Action<Vector2> OnMove;
         public Action<bool> OnDash;
         public Action<bool> OnJump;
         public Action<bool> OnInteract;
+        public Action<bool> OnAnchor;
 
         public Vector2 MovementInput
         {
@@ -68,6 +70,19 @@ namespace CustomInputSystem
                 {
                     _interactInput = value;
                     OnInteract?.Invoke(_interactInput);
+                }
+            }
+        }
+
+        public bool AnchorInput
+        {
+            get => _anchorInput;
+            set
+            {
+                if (_anchorInput != value)
+                {
+                    _anchorInput = value;
+                    OnAnchor?.Invoke(_anchorInput);
                 }
             }
         }
