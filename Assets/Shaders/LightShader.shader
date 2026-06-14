@@ -13,7 +13,6 @@ Shader "UI/LightShader"
         // Light mask settings
         // _LightPositions[i].xy = posición UV, .z = radio individual en espacio viewport
         _LightCount ("Light Count", Int) = 0
-        _LightSmoothing ("Light Smoothing", Range(0, 10)) = 1.0
 
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
@@ -107,7 +106,6 @@ Shader "UI/LightShader"
             // Cada entrada: xy = posición UV de la fuente de luz, z = radio individual
             float4 _LightPositions[MAX_LIGHTS];
             int _LightCount;
-            float _LightSmoothing;
 
             v2f vert(appdata_t v)
             {
@@ -145,9 +143,9 @@ Shader "UI/LightShader"
                 fixed4 gradient = lerp(_Color2, _Color1, t);
                 half4 color = (gradient + _TextureSampleAdd) * IN.color;
 
-                // --- Máscaras de fuentes de luz ---
-                // Cada fuente de luz "abre un agujero" suave en el overlay de oscuridad.
-                // Se toma el máximo aporte de todas las fuentes (unión de máscaras).
+                // --- Fuentes de luz secundarias ---
+                // En su área empujan el color hacia _Color1 (la zona iluminada),
+                // sin borrar el overlay. Se toma la contribución máxima (unión).
                 float lightMask = 0.0;
 
                 for (int i = 0; i < _LightCount && i < MAX_LIGHTS; i++)
@@ -161,17 +159,18 @@ Shader "UI/LightShader"
 
                     float lightDist = length(aspectCorrectedUV - aspectCorrectedLight);
 
-                    // Mismo esquema de suavizado que el gradiente radial
-                    float lightSmoothWidth = _LightSmoothing * 0.1;
+                    // Mismo parámetro de suavizado que el gradiente principal
                     float lightEdge = lightDist / max(lightRadius, 0.0001);
-                    float lightContrib = 1.0 - smoothstep(1.0 - lightSmoothWidth, 1.0 + lightSmoothWidth, lightEdge);
+                    float lightContrib = 1.0 - smoothstep(1.0 - smoothWidth, 1.0 + smoothWidth, lightEdge);
 
                     lightMask = max(lightMask, lightContrib);
                 }
 
-                // Donde la máscara vale 1 (centro de la luz), alpha = 0 (transparente).
-                // Donde vale 0 (fuera del rango), alpha no se modifica.
-                color.a *= (1.0 - lightMask);
+                // Donde lightMask = 1 (centro), el color y alpha son los de _Color1
+                // (igual que si el gradiente principal estuviera centrado ahí).
+                // Donde lightMask = 0 (fuera del radio), nada cambia.
+                half4 lightColor = (_Color1 + _TextureSampleAdd) * IN.color;
+                color = lerp(color, lightColor, lightMask);
 
                 #ifdef UNITY_UI_CLIP_RECT
                 color.a *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);

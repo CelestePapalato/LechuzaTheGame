@@ -45,7 +45,7 @@ public class LightAnchorAbility : AbilityBase
         if (activeAnchor == null) return;
 
         activeAnchor.OnExpired -= HandleAnchorExpired;
-        Vector2 targetPos = activeAnchor.Pull(); // destruye el projéctil, devuelve posición
+        Vector2 targetPos = activeAnchor.Pull(); // destruye el proyectil, devuelve la posición
         user.Movement.Teleport(targetPos);
         activeAnchor = null;
     }
