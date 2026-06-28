@@ -8,22 +8,39 @@ public class TargetDetection : MonoBehaviour
     public UnityEvent<Transform> TargetFound;
     public UnityEvent<Transform> TargetLost;
 
+    [SerializeField]
+    private CircleCollider2D detectionCollider;
+
     List<Transform> targets = new List<Transform>();
 
-    public Transform[] Targets { get => targets.ToArray(); }
+    public Transform[] Targets => targets.ToArray();
 
-    private void OnTriggerEnter(Collider other)
+    private void Awake()
     {
-        if(targets.Contains(other.transform)) { return; }
+        if (detectionCollider == null)
+            detectionCollider = GetComponent<CircleCollider2D>();
+    }
+
+    public void SetDetectionRadius(float radius)
+    {
+        if (detectionCollider == null) return;
+        detectionCollider.radius = radius;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (targets.Contains(other.transform)) return;
+
         targets.Add(other.transform);
         TargetFound?.Invoke(other.transform);
         TargetUpdate?.Invoke(targets.ToArray());
     }
 
-    private void OnTriggerExit(Collider collision)
+    private void OnTriggerExit2D(Collider2D other)
     {
-        targets.Remove(collision.transform);
-        TargetLost?.Invoke(collision.transform);
+        if (!targets.Remove(other.transform)) return;
+
+        TargetLost?.Invoke(other.transform);
         TargetUpdate?.Invoke(targets.ToArray());
     }
 }
