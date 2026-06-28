@@ -43,15 +43,9 @@ namespace EcosDeLaMazmorra.UI
 
         protected virtual void OnDestroy() { }
 
-        public void GoTo(string nodeId)
-        {
-            ScreenManager.Instance?.GoTo(nodeId);
-        }
+        public void GoTo(string nodeId) => ScreenManager.GoTo(nodeId);
 
-        public void GoTo(ScreenNodeSO target)
-        {
-            ScreenManager.Instance?.GoTo(target);
-        }
+        public void GoTo(ScreenNodeSO target) => ScreenManager.GoTo(target);
 
         public virtual void Open()
         {

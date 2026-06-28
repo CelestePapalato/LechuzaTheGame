@@ -661,9 +661,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3964420673477242858}
-        m_TargetAssemblyTypeName: EcosDeLaMazmorra.UI.ScreenNode, Lechuza.UI
-        m_MethodName: PopScene
+      - m_Target: {fileID: 11400000, guid: fc3937c4907bfb442beff82174c3f1ec, type: 2}
+        m_TargetAssemblyTypeName: NavigationHelperSO, Lechuza.Gameplay
+        m_MethodName: ReloadActiveScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

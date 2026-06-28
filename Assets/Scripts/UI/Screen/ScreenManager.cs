@@ -61,17 +61,23 @@ namespace EcosDeLaMazmorra.UI
             currentNode?.Open();
         }
 
-        public bool GoTo(string nodeId)
+        public static bool GoTo(string nodeId) =>
+            Instance != null && Instance.GoToInternal(nodeId);
+
+        public static bool GoTo(ScreenNodeSO targetData) =>
+            Instance != null && Instance.GoToInternal(targetData);
+
+        private bool GoToInternal(string nodeId)
         {
             if (!managementActive) return false;
 
             ScreenNodeSO targetData = currentNodeData.GetTransition(nodeId);
             if (targetData == null) return false;
 
-            return GoTo(targetData);
+            return GoToInternal(targetData);
         }
 
-        public bool GoTo(ScreenNodeSO targetData)
+        private bool GoToInternal(ScreenNodeSO targetData)
         {
             if (!managementActive || targetData == null) return false;
 
