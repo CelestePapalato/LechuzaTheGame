@@ -10,14 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 268fe49eff541a140b64795a14bd7d1b, type: 3}
-  m_Name: HUD
+  m_Name: GAME OVER
   m_EditorClassIdentifier: 
-  nodeId: hud
-  transitionsTo:
-  - {fileID: 11400000, guid: e458e9fa9f0e7a34b96fb0337c8c24dc, type: 2}
-  - {fileID: 11400000, guid: 1d64fda979eb6c94cae6dd95ed37c782, type: 2}
-  - {fileID: 11400000, guid: 21e9e681da8c8404997d4e581245c320, type: 2}
+  nodeId: game_over
+  transitionsTo: []
   enableWindowPopping: 0
   enableScenePopping: 0
-  stopGame: 0
-  nodePrefab: {fileID: 0}
+  stopGame: 1
+  nodePrefab: {fileID: 6271523998128688231, guid: c05035ad38b667f4d80eb7067a997d51, type: 3}
