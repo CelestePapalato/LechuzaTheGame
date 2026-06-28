@@ -33,6 +33,8 @@ public class CercenadorAlado : EnemyBase
     private float alignThreshold = 0.5f;
     [SerializeField, Range(0f, 1f)]
     private float attackFromAboveProbability = 0.75f;
+    [SerializeField]
+    private float attackCooldown = 1.5f;
 
     [Header("Animation Timeouts")]
     [SerializeField]
@@ -47,6 +49,7 @@ public class CercenadorAlado : EnemyBase
     private Vector2 homePosition;
     private bool attackFromAbove;
     private bool attackMovementLocked;
+    private bool canAttack = true;
     private Coroutine attackTimeoutCoroutine;
     private Coroutine stunTimeoutCoroutine;
 
@@ -69,6 +72,8 @@ public class CercenadorAlado : EnemyBase
         movement?.Stop();
         FinishAttackTracking();
         FinishStunTracking();
+        CancelInvoke(nameof(EnableAttack));
+        canAttack = true;
         StopAllCoroutines();
     }
 
@@ -156,7 +161,8 @@ public class CercenadorAlado : EnemyBase
 
         UpdateTargetBelow();
 
-        if (Vector2.Distance(transform.position, GetAttackPosition()) <= alignThreshold)
+        if (canAttack
+            && Vector2.Distance(transform.position, GetAttackPosition()) <= alignThreshold)
             SetState(State.Attack);
     }
 
@@ -244,9 +250,22 @@ public class CercenadorAlado : EnemyBase
     {
         FinishAttackTracking();
         attackMovementLocked = false;
+        BeginAttackCooldown();
 
         if (state != State.Attack) return;
         SetState(target != null ? State.Chase : State.Patrol);
+    }
+
+    private void BeginAttackCooldown()
+    {
+        canAttack = false;
+        CancelInvoke(nameof(EnableAttack));
+        Invoke(nameof(EnableAttack), attackCooldown);
+    }
+
+    private void EnableAttack()
+    {
+        canAttack = true;
     }
 
     private IEnumerator AttackTimeoutRoutine()
