@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 268fe49eff541a140b64795a14bd7d1b, type: 3}
+  m_Name: Pause
+  m_EditorClassIdentifier: 
+  nodeId: pause
+  transitionsTo:
+  - {fileID: 11400000, guid: e8d5ab97906f1544bb8390f53cc68b21, type: 2}
+  enableWindowPopping: 1
+  enableScenePopping: 1
+  stopGame: 1
+  nodePrefab: {fileID: 6271523998128688231, guid: bcfb686c124b57148921a4e31fc84bcc, type: 3}
