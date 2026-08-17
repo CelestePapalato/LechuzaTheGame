@@ -76,7 +76,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected void UpdateAggressiveness(int currentLight, int maxLight)
     {
-        bool isAggressive = currentLight <= aggressiveLightThreshold;
+        bool isAggressive = currentLight >= aggressiveLightThreshold;
 
         if (targetDetection != null)
         {

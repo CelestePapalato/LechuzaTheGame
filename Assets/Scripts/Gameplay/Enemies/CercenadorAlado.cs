@@ -277,7 +277,7 @@ public class CercenadorAlado : EnemyBase
             FinishAttack();
     }
 
-    //---- STUN HANDLER | Not really in use right now!! Stun is yet to be implemented nor is there any animation
+    //---- STUN HANDLER | No hay animación ni se encuentra implementado aún
 
     private void BeginStunTracking()
     {
