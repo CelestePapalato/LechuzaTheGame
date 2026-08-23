@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -26,6 +25,8 @@ namespace Lechuza.UI
         protected bool isWindowPoppingEnabled = true;
         protected bool isActive = false;
 
+        public event Action<ScreenNodeSO> OpenRequested;
+
         public UnityEvent OnOpen;
         public UnityEvent OnClose;
         public UnityEvent OnShow;
@@ -43,9 +44,14 @@ namespace Lechuza.UI
 
         protected virtual void OnDestroy() { }
 
-        public void GoTo(string nodeId) => ScreenManager.GoTo(nodeId);
+        public void GoTo(string nodeId)
+        {
+            var target = nodeData?.GetTransition(nodeId);
+            if (target != null)
+                OpenRequested?.Invoke(target);
+        }
 
-        public void GoTo(ScreenNodeSO target) => ScreenManager.GoTo(target);
+        public void GoTo(ScreenNodeSO target) => OpenRequested?.Invoke(target);
 
         public virtual void Open()
         {
@@ -56,8 +62,8 @@ namespace Lechuza.UI
 
         public virtual void Close()
         {
-            OnClose?.Invoke();
             OnCloseComplete();
+            OnClose?.Invoke();
         }
 
         public virtual void Hide()
@@ -165,8 +171,7 @@ namespace Lechuza.UI
                 windowStack.Pop();
                 currentActiveWindow?.SetWindowActiveState(false);
                 currentActiveWindow = null;
-                if (!poppedByController)
-                    ScreenManager.Instance?.GoBack();
+                Close();
             }
         }
 

@@ -5,9 +5,17 @@ using UnityEngine.SceneManagement;
 [CreateAssetMenu(fileName = "Navigation Helper", menuName = "Gameplay/Navigation Helper")]
 public class NavigationHelperSO : ScriptableObject
 {
-    public void GoToScreen(string nodeId) => ScreenManager.GoTo(nodeId);
+    public void GoToScreen(string nodeId)
+    {
+        if (Services.TryGet<ScreenService>(out var screens))
+            screens.GoTo(nodeId);
+    }
 
-    public void GoToScreen(ScreenNodeSO screen) => ScreenManager.GoTo(screen);
+    public void GoToScreen(ScreenNodeSO screen)
+    {
+        if (Services.TryGet<ScreenService>(out var screens))
+            screens.GoTo(screen);
+    }
 
     public void LoadScene(string sceneName) => SceneManager.LoadScene(sceneName);
 

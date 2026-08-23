@@ -1,10 +1,18 @@
+using System.Collections;
+using Lechuza.UI;
 using UnityEngine;
 
 public sealed class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    [Header("References")]
     [SerializeField] Health _playerHealth;
+    [SerializeField] ScreenNodeSO gameOverScreen;
+    [SerializeField] ScreenNodeSO levelCompletedScreen;
+
+    [Header("Settings")]
+    [SerializeField] float waitTimeBeforeGameOver = 2f;
 
     private void Awake()
     {
@@ -36,9 +44,17 @@ public sealed class GameManager : MonoBehaviour
 
     private void GameOver()
     {
+        StartCoroutine(GameOverRoutine());
+    }
+
+    private IEnumerator GameOverRoutine()
+    {
+        yield return new WaitForSeconds(waitTimeBeforeGameOver);
+        Services.Get<ScreenService>().GoTo(gameOverScreen);
     }
 
     public void LevelCompleted()
     {
+        Services.Get<ScreenService>().GoTo(levelCompletedScreen);
     }
 }

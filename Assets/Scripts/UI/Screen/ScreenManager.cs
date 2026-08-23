@@ -5,7 +5,6 @@ namespace Lechuza.UI
 {
     public class ScreenManager : MonoBehaviour
     {
-        public static ScreenManager Instance { get; private set; }
         public string CurrentNodeId => currentNodeData?.nodeId;
 
         [SerializeField] ScreenNodeSO startNode;
@@ -17,21 +16,16 @@ namespace Lechuza.UI
 
         private bool managementActive = true;
         private int minimumHistorySize = 1;
+        private bool handlingNodeClosed;
 
         void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            Instance = this;
             Init(startNode);
         }
 
         private void OnDestroy()
         {
-            if (Instance == this) Instance = null;
+            Unsubscribe(currentNode);
         }
 
         private void Init(ScreenNodeSO root)
@@ -58,18 +52,13 @@ namespace Lechuza.UI
             minimumHistorySize = 1;
             history.Push(currentNodeData);
             currentNode?.SetSortOrder(history.Count - 1);
+            Subscribe(currentNode);
             currentNode?.Open();
         }
 
-        public static bool GoTo(string nodeId) =>
-            Instance != null && Instance.GoToInternal(nodeId);
-
-        public static bool GoTo(ScreenNodeSO targetData) =>
-            Instance != null && Instance.GoToInternal(targetData);
-
-        private bool GoToInternal(string nodeId)
+        public bool GoTo(string nodeId)
         {
-            if (!managementActive) return false;
+            if (!managementActive || currentNodeData == null) return false;
 
             ScreenNodeSO targetData = currentNodeData.GetTransition(nodeId);
             if (targetData == null) return false;
@@ -77,12 +66,15 @@ namespace Lechuza.UI
             return GoToInternal(targetData);
         }
 
+        public bool GoTo(ScreenNodeSO targetData) => GoToInternal(targetData);
+
         private bool GoToInternal(ScreenNodeSO targetData)
         {
             if (!managementActive || targetData == null) return false;
 
             bool firstScreenPush = history.Count == minimumHistorySize;
 
+            Unsubscribe(currentNode);
             currentNode?.Hide();
 
             if (nodeInstances.TryGetValue(targetData.nodeId, out var existingNode))
@@ -96,6 +88,7 @@ namespace Lechuza.UI
             history.Push(targetData);
             currentNodeData = targetData;
 
+            Subscribe(currentNode);
             currentNode?.Open();
             currentNode?.SetSortOrder(history.Count - 1);
 
@@ -111,26 +104,24 @@ namespace Lechuza.UI
         public void GoBack()
         {
             if (history.Count == minimumHistorySize) return;
-
             currentNode?.Close();
-            history.Pop();
-            currentNodeData = history.Peek();
-            currentNode = nodeInstances[currentNodeData.nodeId];
-            currentNode?.Show();
-
-            if (history.Count == minimumHistorySize)
-                OnAllScreensPopped();
         }
 
         public void PopAll()
         {
+            Unsubscribe(currentNode);
+
             while (history.Count > minimumHistorySize)
             {
+                handlingNodeClosed = true;
                 currentNode?.Close();
+                handlingNodeClosed = false;
                 history.Pop();
                 currentNodeData = history.Peek();
                 currentNode = nodeInstances[currentNodeData.nodeId];
             }
+
+            Subscribe(currentNode);
             currentNode?.Show();
             OnAllScreensPopped();
         }
@@ -138,10 +129,48 @@ namespace Lechuza.UI
         public void PopWindow() => currentNode?.PopWindow();
         public void PushWindow(WindowBase newWindow) => currentNode?.PushWindow(newWindow);
 
+        private void Subscribe(ScreenNode node)
+        {
+            if (node == null) return;
+            node.OpenRequested += HandleOpenRequested;
+            node.OnClose.AddListener(HandleNodeClosed);
+        }
+
+        private void Unsubscribe(ScreenNode node)
+        {
+            if (node == null) return;
+            node.OpenRequested -= HandleOpenRequested;
+            node.OnClose.RemoveListener(HandleNodeClosed);
+        }
+
+        private void HandleOpenRequested(ScreenNodeSO target) => GoToInternal(target);
+
+        private void HandleNodeClosed()
+        {
+            if (handlingNodeClosed) return;
+
+            if (history.Count <= minimumHistorySize)
+            {
+                currentNode?.Open();
+                return;
+            }
+
+            Unsubscribe(currentNode);
+            history.Pop();
+            currentNodeData = history.Peek();
+            currentNode = nodeInstances[currentNodeData.nodeId];
+            Subscribe(currentNode);
+            currentNode?.Show();
+
+            if (history.Count == minimumHistorySize)
+                OnAllScreensPopped();
+        }
+
         protected void OnFirstScreenPush()
         {
             //GameStateEvents.BroadcastStateChange(GameState.UI_SCENE);
         }
+
         protected virtual void OnAllScreensPopped()
         {
             //GameStateEvents.BroadcastStateChange(GameState.PLAYING);
@@ -150,8 +179,14 @@ namespace Lechuza.UI
         private void OnRemovedLoop(List<ScreenNodeSO> nodes)
         {
             foreach (var data in nodes)
-                if (nodeInstances.TryGetValue(data.nodeId, out var node))
-                    node.Close();
+            {
+                if (!nodeInstances.TryGetValue(data.nodeId, out var node))
+                    continue;
+
+                handlingNodeClosed = true;
+                node.Close();
+                handlingNodeClosed = false;
+            }
         }
 
         [ContextMenu("Print history stack")]
