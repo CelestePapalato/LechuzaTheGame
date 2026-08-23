@@ -77,7 +77,6 @@ namespace Lechuza.UI
             OnShow?.Invoke();
             EnableButtonInteraction(true);
             OnOpenStart();
-            Time.timeScale = nodeData.stopGame ? 0 : 1;
         }
 
         public void SetSortOrder(int n = 0)

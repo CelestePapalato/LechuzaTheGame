@@ -20,4 +20,4 @@ MonoBehaviour:
   enableWindowPopping: 0
   enableScenePopping: 0
   stopGame: 0
-  nodePrefab: {fileID: 0}
+  nodePrefab: {fileID: 2821529247060763661, guid: 1d649f84c8092174e81ff2d352531aca, type: 3}
