@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace EcosDeLaMazmorra.UI
+namespace Lechuza.UI
 {
     public class FlowStack<T>
     {

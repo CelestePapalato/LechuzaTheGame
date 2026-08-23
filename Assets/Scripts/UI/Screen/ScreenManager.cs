@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EcosDeLaMazmorra.UI
+namespace Lechuza.UI
 {
     public class ScreenManager : MonoBehaviour
     {

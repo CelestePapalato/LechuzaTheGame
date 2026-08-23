@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace EcosDeLaMazmorra.UI
+namespace Lechuza.UI
 {
     public class ScreenNode : MonoBehaviour, IWindowHost
     {

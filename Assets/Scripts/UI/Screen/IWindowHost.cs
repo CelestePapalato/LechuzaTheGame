@@ -1,4 +1,4 @@
-namespace EcosDeLaMazmorra.UI
+namespace Lechuza.UI
 {
     public interface IWindowHost
     {

@@ -1,4 +1,4 @@
-using EcosDeLaMazmorra.UI;
+using Lechuza.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

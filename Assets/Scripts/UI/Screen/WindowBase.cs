@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-namespace EcosDeLaMazmorra.UI
+namespace Lechuza.UI
 {
     public class WindowBase : MonoBehaviour
     {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace EcosDeLaMazmorra.UI
+namespace Lechuza.UI
 {
     [CreateAssetMenu(fileName = "Screen Node SO", menuName = "UI/Screen Node")]
     public class ScreenNodeSO : ScriptableObject

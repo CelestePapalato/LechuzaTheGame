@@ -1,10 +1,7 @@
 {
     "name": "Lechuza.Services",
     "rootNamespace": "",
-    "references": [
-        "GUID:fac80c316af38d84e9bc8364105ceac9",
-        "GUID:e6ca83beef2d99647b5825acf213d6aa"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
