@@ -16,7 +16,7 @@ public class SceneService : IService
     public Task InitializeAsync()
     {
         var go = new GameObject("[SceneService]");
-        Object.DontDestroyOnLoad(go);
+        UnityEngine.Object.DontDestroyOnLoad(go);
         _runner = go.AddComponent<SceneServiceRunner>();
 
         SceneManager.sceneLoaded += HandleSceneLoaded;
