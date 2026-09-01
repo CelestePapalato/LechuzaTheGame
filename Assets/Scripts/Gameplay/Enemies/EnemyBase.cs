@@ -22,16 +22,8 @@ public abstract class EnemyBase : MonoBehaviour
     protected Transform target;
     protected float currentSpeed;
     protected bool isStunned;
-    protected Health health;
 
     private Coroutine stunCoroutine;
-
-    protected virtual void Awake()
-    {
-        health = GetComponent<Health>();
-        if (health != null)
-            health.OnDeath += HandleDeath;
-    }
 
     protected virtual void OnEnable()
     {
@@ -124,16 +116,6 @@ public abstract class EnemyBase : MonoBehaviour
         isStunned = false;
         stunCoroutine = null;
         OnStunEnded();
-    }
-
-    protected virtual void HandleDeath()
-    {
-        OnEnemyDeath();
-    }
-
-    protected virtual void OnEnemyDeath()
-    {
-        gameObject.SetActive(false);
     }
 
     protected abstract void OnTargetFound(Transform foundTarget);

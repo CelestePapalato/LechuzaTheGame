@@ -53,9 +53,8 @@ public class CercenadorAlado : EnemyBase
     private Coroutine attackTimeoutCoroutine;
     private Coroutine stunTimeoutCoroutine;
 
-    protected override void Awake()
+    protected void Awake()
     {
-        base.Awake();
         homePosition = transform.position;
 
         if (movement == null)
@@ -79,8 +78,6 @@ public class CercenadorAlado : EnemyBase
 
     private void Update()
     {
-        if (health != null && health.CurrentHealth <= 0) return;
-
         UpdateMovement();
         UpdateStateLogic();
     }
@@ -277,7 +274,7 @@ public class CercenadorAlado : EnemyBase
             FinishAttack();
     }
 
-    //---- STUN HANDLER | No hay animación ni se encuentra implementado aún
+    //---- STUN HANDLER | No hay animaciï¿½n ni se encuentra implementado aï¿½n
 
     private void BeginStunTracking()
     {
