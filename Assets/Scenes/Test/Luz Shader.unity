@@ -309,9 +309,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 318984169}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d4948b1767ba13419c8bb8306867ac6, type: 3}
+  m_Script: {fileID: 11500000, guid: 25d69d95a6245c44b93d4d3e93bf4a36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lowestFalloffValue: 0.1
+  highestFalloffValue: 0.5
+  smoothSpeed: 5
+  falloffProperty: _Falloff
   targetImage: {fileID: 466202955}
   targetObject: {fileID: 7507083836672885331}
   viewportCamera: {fileID: 1303627026}
@@ -411,6 +415,13 @@ MonoBehaviour:
   highestFalloffValue: 0.5
   smoothSpeed: 5
   falloffProperty: _Falloff
+  targetImage: {fileID: 466202955}
+  targetObject: {fileID: 7507083836672885331}
+  viewportCamera: {fileID: 1303627026}
+  offset: {x: -0.003, y: 0.035}
+  originXProperty: _OriginX
+  originYProperty: _OriginY
+  proximityMargin: 0.25
 --- !u!1 &483265622
 GameObject:
   m_ObjectHideFlags: 0

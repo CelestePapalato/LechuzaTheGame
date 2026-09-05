@@ -10,6 +10,6 @@ public class LightSource : MonoBehaviour, ILightSource
     public float   Radius => radius;
     public bool    IsActive => isActiveAndEnabled;
 
-    private void OnEnable() => ViewportLightController.Register(this);
-    private void OnDisable() => ViewportLightController.Unregister(this);
+    private void OnEnable() => LightShaderController.Register(this);
+    private void OnDisable() => LightShaderController.Unregister(this);
 }
