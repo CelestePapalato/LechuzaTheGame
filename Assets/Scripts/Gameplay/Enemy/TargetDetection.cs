@@ -27,6 +27,27 @@ public class TargetDetection : MonoBehaviour
         detectionCollider.radius = radius;
     }
 
+    public void SetDetectionActive(bool active)
+    {
+        if (detectionCollider == null) return;
+
+        if (!active)
+            ClearTargets();
+
+        detectionCollider.enabled = active;
+    }
+
+    public void ClearTargets()
+    {
+        if (targets.Count == 0) return;
+
+        foreach (Transform t in targets.ToArray())
+            TargetLost?.Invoke(t);
+
+        targets.Clear();
+        TargetUpdate?.Invoke(targets.ToArray());
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (targets.Contains(other.transform)) return;

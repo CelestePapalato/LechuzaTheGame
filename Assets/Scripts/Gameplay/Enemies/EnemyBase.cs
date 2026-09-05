@@ -5,19 +5,19 @@ public abstract class EnemyBase : MonoBehaviour
 {
     [Header("Detection")]
     [SerializeField]
-    private TargetDetection targetDetection;
+    protected TargetDetection targetDetection;
 
     [Header("Aggressiveness")]
     [SerializeField]
-    private float baseDetectionRadius = 4f;
+    protected float baseDetectionRadius = 4f;
     [SerializeField]
-    private float aggressiveDetectionBonus = 2f;
+    protected float aggressiveDetectionBonus = 2f;
     [SerializeField]
-    private float baseSpeed = 3f;
+    protected float baseSpeed = 3f;
     [SerializeField]
-    private float aggressiveSpeedBonus = 1.5f;
+    protected float aggressiveSpeedBonus = 1.5f;
     [SerializeField]
-    private int aggressiveLightThreshold = 2;
+    protected int aggressiveLightThreshold = 2;
 
     protected Transform target;
     protected float currentSpeed;
@@ -66,7 +66,7 @@ public abstract class EnemyBase : MonoBehaviour
         stunCoroutine = StartCoroutine(StunRoutine(duration));
     }
 
-    protected void UpdateAggressiveness(int currentLight, int maxLight)
+    protected virtual void UpdateAggressiveness(int currentLight, int maxLight)
     {
         bool isAggressive = currentLight >= aggressiveLightThreshold;
 
@@ -116,6 +116,13 @@ public abstract class EnemyBase : MonoBehaviour
         isStunned = false;
         stunCoroutine = null;
         OnStunEnded();
+    }
+
+    protected void ForceLoseTarget()
+    {
+        if (target == null) return;
+        target = null;
+        OnTargetLost();
     }
 
     protected abstract void OnTargetFound(Transform foundTarget);

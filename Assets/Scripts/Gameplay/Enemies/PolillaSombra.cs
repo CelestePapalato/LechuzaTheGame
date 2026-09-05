@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class CercenadorAlado : EnemyBase
+public class PolillaSombra : EnemyBase
 {
     private enum State
     {
@@ -12,11 +12,21 @@ public class CercenadorAlado : EnemyBase
 
     [Header("References")]
     [SerializeField]
+    private MothMovement movement;
+    [SerializeField]
     private Animator animator;
     [SerializeField]
     private AnimationEventHandler animationEventHandler;
     [SerializeField]
-    private BirdMovement movement;
+    private Damage damage;
+
+    [Header("Light Thresholds")]
+    [SerializeField]
+    private int brightLightThreshold = 4;
+    [SerializeField]
+    private int invisibleLightMin = 2;
+    [SerializeField]
+    private int invisibleLightMax = 3;
 
     [Header("Movement")]
     [SerializeField]
@@ -28,11 +38,7 @@ public class CercenadorAlado : EnemyBase
 
     [Header("Chase")]
     [SerializeField]
-    private float positionOffset = 2f;
-    [SerializeField]
     private float alignThreshold = 0.5f;
-    [SerializeField, Range(0f, 1f)]
-    private float attackFromAboveProbability = 0.75f;
     [SerializeField]
     private float attackCooldown = 1.5f;
 
@@ -42,12 +48,11 @@ public class CercenadorAlado : EnemyBase
     [SerializeField]
     private float stunTimeout = 1.5f;
 
-    private static readonly int TargetBelowHash = Animator.StringToHash("Target Below");
     private static readonly int AttackHash = Animator.StringToHash("Attack");
 
     private State state = State.Patrol;
     private Vector2 homePosition;
-    private bool attackFromAbove;
+    private bool isBrightLight;
     private bool attackMovementLocked;
     private bool canAttack = true;
     private Coroutine attackTimeoutCoroutine;
@@ -58,22 +63,60 @@ public class CercenadorAlado : EnemyBase
         homePosition = transform.position;
 
         if (movement == null)
-            movement = GetComponent<BirdMovement>();
+            movement = GetComponent<MothMovement>();
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
         if (animationEventHandler == null)
             animationEventHandler = GetComponentInChildren<AnimationEventHandler>();
+        if (damage == null)
+            damage = GetComponentInChildren<Damage>();
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
         movement?.Stop();
-        FinishAttackTracking();
+        CancelAttack();
         FinishStunTracking();
         CancelInvoke(nameof(EnableAttack));
         canAttack = true;
         StopAllCoroutines();
+    }
+
+    private void Start()
+    {
+        damage?.EnableDamage(false);
+    }
+
+    protected override void UpdateAggressiveness(int currentLight, int maxLight)
+    {
+        bool wasBright = isBrightLight;
+        bool isInvisible = currentLight >= invisibleLightMin && currentLight <= invisibleLightMax;
+        isBrightLight = currentLight >= brightLightThreshold;
+
+        if (isInvisible)
+        {
+            targetDetection?.SetDetectionActive(false);
+            currentSpeed = baseSpeed;
+            ForceLoseTarget();
+        }
+        else if (isBrightLight)
+        {
+            targetDetection?.SetDetectionActive(true);
+            targetDetection?.SetDetectionRadius(baseDetectionRadius + aggressiveDetectionBonus);
+            currentSpeed = baseSpeed + aggressiveSpeedBonus;
+            TryAcquireTargetFromDetection();
+        }
+        else
+        {
+            targetDetection?.SetDetectionActive(true);
+            targetDetection?.SetDetectionRadius(baseDetectionRadius);
+            currentSpeed = baseSpeed;
+            ForceLoseTarget();
+        }
+
+        if (wasBright && !isBrightLight && state == State.Attack)
+            CancelAttack();
     }
 
     private void Update()
@@ -82,24 +125,35 @@ public class CercenadorAlado : EnemyBase
         UpdateStateLogic();
     }
 
+    private void TryAcquireTargetFromDetection()
+    {
+        if (isStunned || target != null || targetDetection == null) return;
+
+        Transform[] detected = targetDetection.Targets;
+        if (detected.Length == 0) return;
+
+        target = detected[0];
+        OnTargetFound(target);
+    }
+
     //---- TARGET DETECTION
 
     protected override void OnTargetFound(Transform foundTarget)
     {
-        if (isStunned) return;
+        if (isStunned || !isBrightLight) return;
         SetState(State.Chase);
     }
 
     protected override void OnTargetLost()
     {
         if (isStunned) return;
-        if (state == State.Chase)
+        if (state == State.Chase || state == State.Attack)
             SetState(State.Patrol);
     }
 
     protected override void OnStunned()
     {
-        FinishAttackTracking();
+        CancelAttack();
         movement?.Stop();
         BeginStunTracking();
     }
@@ -107,14 +161,14 @@ public class CercenadorAlado : EnemyBase
     protected override void OnStunEnded()
     {
         FinishStunTracking();
-        SetState(target != null ? State.Chase : State.Patrol);
+        SetState(target != null && isBrightLight ? State.Chase : State.Patrol);
     }
 
     //---- MOVEMENT
 
     private void UpdateMovement()
     {
-        if (movement == null) return;
+        if (movement == null || isStunned) return;
 
         switch (state)
         {
@@ -123,11 +177,11 @@ public class CercenadorAlado : EnemyBase
                 break;
             case State.Chase:
                 if (target != null)
-                    movement.SetDestination(GetAttackPosition(), currentSpeed);
+                    movement.SetDestination(target.position, currentSpeed);
                 break;
             case State.Attack:
                 if (!attackMovementLocked && target != null)
-                    movement.SetDestination(GetAttackPosition(), currentSpeed);
+                    movement.SetDestination(target.position, currentSpeed);
                 break;
         }
     }
@@ -135,13 +189,8 @@ public class CercenadorAlado : EnemyBase
     private Vector2 GetPatrolDestination()
     {
         float x = homePosition.x + Mathf.Sin(Time.time * patrolCycleSpeed) * patrolRange;
-        return new Vector2(x, homePosition.y);
-    }
-
-    private Vector2 GetAttackPosition()
-    {
-        float desiredY = target.position.y + (attackFromAbove ? positionOffset : -positionOffset);
-        return new Vector2(target.position.x, desiredY);
+        float y = homePosition.y + Mathf.Cos(Time.time * patrolCycleSpeed * 0.7f) * patrolRange * 0.5f;
+        return new Vector2(x, y);
     }
 
     //---- STATE LOGIC
@@ -150,33 +199,30 @@ public class CercenadorAlado : EnemyBase
     {
         if (state != State.Chase) return;
 
-        if (target == null)
+        if (target == null || !isBrightLight)
         {
             SetState(State.Patrol);
             return;
         }
 
-        UpdateTargetBelow();
-
         if (canAttack
-            && Vector2.Distance(transform.position, GetAttackPosition()) <= alignThreshold)
+            && Vector2.Distance(transform.position, target.position) <= alignThreshold)
             SetState(State.Attack);
-    }
-
-    private void UpdateTargetBelow()
-    {
-        if (animator == null || target == null) return;
-        animator.SetBool(TargetBelowHash, target.position.y < transform.position.y);
     }
 
     private void SetState(State newState)
     {
+        if (newState == State.Attack && !isBrightLight)
+            return;
+
+        if (newState != State.Attack && state == State.Attack)
+            CancelAttack();
+
         state = newState;
 
         switch (newState)
         {
             case State.Chase:
-                attackFromAbove = Random.value < attackFromAboveProbability;
                 attackMovementLocked = false;
                 break;
             case State.Patrol:
@@ -184,14 +230,13 @@ public class CercenadorAlado : EnemyBase
                 break;
             case State.Attack:
                 attackMovementLocked = false;
-                UpdateTargetBelow();
                 animator?.SetTrigger(AttackHash);
                 BeginAttackTracking();
                 break;
         }
     }
 
-    //---- ANIMATION HANDLER
+    //---- ATTACK
 
     private void BeginAttackTracking()
     {
@@ -202,19 +247,6 @@ public class CercenadorAlado : EnemyBase
             animationEventHandler.onAnimationStart += HandleAttackStart;
             animationEventHandler.onAnimationComplete += HandleAttackComplete;
         }
-    }
-
-    private void StartAttackTimeout()
-    {
-        StopAttackTimeout();
-        attackTimeoutCoroutine = StartCoroutine(AttackTimeoutRoutine());
-    }
-
-    private void StopAttackTimeout()
-    {
-        if (attackTimeoutCoroutine == null) return;
-        StopCoroutine(attackTimeoutCoroutine);
-        attackTimeoutCoroutine = null;
     }
 
     private void FinishAttackTracking()
@@ -234,6 +266,12 @@ public class CercenadorAlado : EnemyBase
 
         attackMovementLocked = true;
         movement?.Stop();
+
+        if (isBrightLight)
+            damage?.EnableDamage(true);
+        else
+            CancelAttack();
+
         StartAttackTimeout();
     }
 
@@ -245,12 +283,24 @@ public class CercenadorAlado : EnemyBase
 
     private void FinishAttack()
     {
+        damage?.EnableDamage(false);
         FinishAttackTracking();
         attackMovementLocked = false;
         BeginAttackCooldown();
 
         if (state != State.Attack) return;
-        SetState(target != null ? State.Chase : State.Patrol);
+        SetState(target != null && isBrightLight ? State.Chase : State.Patrol);
+    }
+
+    private void CancelAttack()
+    {
+        damage?.EnableDamage(false);
+        FinishAttackTracking();
+        attackMovementLocked = false;
+
+        if (state != State.Attack) return;
+
+        state = target != null && isBrightLight ? State.Chase : State.Patrol;
     }
 
     private void BeginAttackCooldown()
@@ -265,6 +315,19 @@ public class CercenadorAlado : EnemyBase
         canAttack = true;
     }
 
+    private void StartAttackTimeout()
+    {
+        StopAttackTimeout();
+        attackTimeoutCoroutine = StartCoroutine(AttackTimeoutRoutine());
+    }
+
+    private void StopAttackTimeout()
+    {
+        if (attackTimeoutCoroutine == null) return;
+        StopCoroutine(attackTimeoutCoroutine);
+        attackTimeoutCoroutine = null;
+    }
+
     private IEnumerator AttackTimeoutRoutine()
     {
         yield return new WaitForSeconds(attackTimeout);
@@ -274,7 +337,8 @@ public class CercenadorAlado : EnemyBase
             FinishAttack();
     }
 
-    //---- STUN HANDLER | No hay animación ni se encuentra implementado aún
+    //---- STUN HANDLER | No hay animación ni se encuentra implementado aún.
+    // Tendría que ir en EnemyBase.
 
     private void BeginStunTracking()
     {
