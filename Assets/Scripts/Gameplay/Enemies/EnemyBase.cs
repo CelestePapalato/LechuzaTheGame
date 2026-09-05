@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public abstract class EnemyBase : MonoBehaviour
@@ -21,9 +20,6 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected Transform target;
     protected float currentSpeed;
-    protected bool isStunned;
-
-    private Coroutine stunCoroutine;
 
     protected virtual void OnEnable()
     {
@@ -50,20 +46,6 @@ public abstract class EnemyBase : MonoBehaviour
         }
 
         PlayerState.OnLightChange -= UpdateAggressiveness;
-
-        if (stunCoroutine != null)
-        {
-            StopCoroutine(stunCoroutine);
-            stunCoroutine = null;
-        }
-    }
-
-    public void Stun(float duration)
-    {
-        if (stunCoroutine != null)
-            StopCoroutine(stunCoroutine);
-
-        stunCoroutine = StartCoroutine(StunRoutine(duration));
     }
 
     protected virtual void UpdateAggressiveness(int currentLight, int maxLight)
@@ -100,24 +82,6 @@ public abstract class EnemyBase : MonoBehaviour
             OnTargetLost();
     }
 
-/*
-    Stun and health not really implemented.
-    Maybe Light Anchor could stun enemies, 
-    but LechucitaSHSH can't really kill enemies.
-*/
-
-    private IEnumerator StunRoutine(float duration)
-    {
-        isStunned = true;
-        OnStunned();
-
-        yield return new WaitForSeconds(duration);
-
-        isStunned = false;
-        stunCoroutine = null;
-        OnStunEnded();
-    }
-
     protected void ForceLoseTarget()
     {
         if (target == null) return;
@@ -127,6 +91,4 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected abstract void OnTargetFound(Transform foundTarget);
     protected abstract void OnTargetLost();
-    protected abstract void OnStunned();
-    protected abstract void OnStunEnded();
 }

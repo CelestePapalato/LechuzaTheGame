@@ -39,8 +39,6 @@ public class CercenadorAlado : EnemyBase
     [Header("Animation Timeouts")]
     [SerializeField]
     private float attackTimeout = 2f;
-    [SerializeField]
-    private float stunTimeout = 1.5f;
 
     private static readonly int TargetBelowHash = Animator.StringToHash("Target Below");
     private static readonly int AttackHash = Animator.StringToHash("Attack");
@@ -51,7 +49,6 @@ public class CercenadorAlado : EnemyBase
     private bool attackMovementLocked;
     private bool canAttack = true;
     private Coroutine attackTimeoutCoroutine;
-    private Coroutine stunTimeoutCoroutine;
 
     protected void Awake()
     {
@@ -70,7 +67,6 @@ public class CercenadorAlado : EnemyBase
         base.OnDisable();
         movement?.Stop();
         FinishAttackTracking();
-        FinishStunTracking();
         CancelInvoke(nameof(EnableAttack));
         canAttack = true;
         StopAllCoroutines();
@@ -86,28 +82,13 @@ public class CercenadorAlado : EnemyBase
 
     protected override void OnTargetFound(Transform foundTarget)
     {
-        if (isStunned) return;
         SetState(State.Chase);
     }
 
     protected override void OnTargetLost()
     {
-        if (isStunned) return;
         if (state == State.Chase)
             SetState(State.Patrol);
-    }
-
-    protected override void OnStunned()
-    {
-        FinishAttackTracking();
-        movement?.Stop();
-        BeginStunTracking();
-    }
-
-    protected override void OnStunEnded()
-    {
-        FinishStunTracking();
-        SetState(target != null ? State.Chase : State.Patrol);
     }
 
     //---- MOVEMENT
@@ -272,47 +253,5 @@ public class CercenadorAlado : EnemyBase
 
         if (state == State.Attack)
             FinishAttack();
-    }
-
-    //---- STUN HANDLER | No hay animación ni se encuentra implementado aún
-
-    private void BeginStunTracking()
-    {
-        FinishStunTracking();
-
-        if (animationEventHandler != null)
-            animationEventHandler.onAnimationComplete += HandleStunComplete;
-
-        stunTimeoutCoroutine = StartCoroutine(StunTimeoutRoutine());
-    }
-
-    private void StopStunTimeout()
-    {
-        if (stunTimeoutCoroutine == null) return;
-        StopCoroutine(stunTimeoutCoroutine);
-        stunTimeoutCoroutine = null;
-    }
-
-    private void FinishStunTracking()
-    {
-        if (animationEventHandler != null)
-            animationEventHandler.onAnimationComplete -= HandleStunComplete;
-
-        StopStunTimeout();
-    }
-
-    private void HandleStunComplete(EnemyAnimatorState animState)
-    {
-        if (animState != EnemyAnimatorState.STUN || !isStunned) return;
-        FinishStunTracking();
-    }
-
-    private IEnumerator StunTimeoutRoutine()
-    {
-        yield return new WaitForSeconds(stunTimeout);
-        stunTimeoutCoroutine = null;
-
-        if (isStunned)
-            FinishStunTracking();
     }
 }

@@ -330,6 +330,7 @@ GameObject:
   - component: {fileID: 466202953}
   - component: {fileID: 466202956}
   - component: {fileID: 466202955}
+  - component: {fileID: 466202957}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -370,7 +371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 64362db8aef7cc64cabb40faf94e88de, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -394,6 +395,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 466202952}
   m_CullTransparentMesh: 1
+--- !u!114 &466202957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 466202952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d69d95a6245c44b93d4d3e93bf4a36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lowestFalloffValue: 0.1
+  highestFalloffValue: 0.5
+  smoothSpeed: 5
+  falloffProperty: _Falloff
 --- !u!1 &483265622
 GameObject:
   m_ObjectHideFlags: 0
@@ -872,7 +889,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &563404268
 Transform:
   m_ObjectHideFlags: 0
@@ -922,7 +939,6 @@ MonoBehaviour:
   alignThreshold: 0.5
   attackCooldown: 1.5
   attackTimeout: 2
-  stunTimeout: 1.5
 --- !u!114 &563404270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -936,8 +952,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoothTime: 0.4
-  noiseAmplitude: 0.3
-  noiseFrequency: 1.5
+  noiseAmplitude: 1.55
+  noiseFrequency: 6.31
   noiseSeed: 215643
 --- !u!1 &828260367
 GameObject:
