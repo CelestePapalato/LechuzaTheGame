@@ -7,30 +7,30 @@ using UnityEditor;
 
 [ExecuteInEditMode]
 public class LightShaderController : MonoBehaviour
-{
+{    
+    private const string falloffProperty = "_Falloff";
+    private const string originXProperty = "_OriginX";
+    private const string originYProperty = "_OriginY";
+
     private const int MaxLights = 16;
     private const string LightCountProperty = "_LightCount";
     private const string LightPositionsProperty = "_LightPositions";
+
+    [Header("Components")]
+    [SerializeField]private Image targetImage;
 
     [Header("Falloff")]
     [SerializeField] float lowestFalloffValue = 0.1f;
     [SerializeField] float highestFalloffValue = 0.5f;
     [SerializeField] float smoothSpeed = 5f;
 
-    public string falloffProperty = "_Falloff";
 
-    [Header("Gradient Origin (main player light)")]
-
-    [SerializeField]private Image targetImage;
+    [Header("Player light")]
     [SerializeField] private Transform targetObject;
     [SerializeField] private Camera viewportCamera;
     [SerializeField] private Vector2 offset;
-
-    [Header("Shader Properties")]
-    [SerializeField] private string originXProperty = "_OriginX";
-    [SerializeField] private string originYProperty = "_OriginY";
-
-    [Header("Light Source Proximity")]
+    
+    [Header("Light Source configs")]
     [SerializeField] private float proximityMargin = 0.25f;
 
     Material radialLightshader;
