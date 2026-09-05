@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MothMovement : MonoBehaviour
+public class MothMovement : MonoBehaviour, IEnemyMovement
 {
     [Header("Smoothing")]
     [SerializeField]

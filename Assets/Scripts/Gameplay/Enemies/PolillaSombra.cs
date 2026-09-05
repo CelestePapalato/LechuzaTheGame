@@ -12,7 +12,7 @@ public class PolillaSombra : EnemyBase
 
     [Header("References")]
     [SerializeField]
-    private MothMovement movement;
+    private IEnemyMovement movement;
     [SerializeField]
     private Animator animator;
     [SerializeField]
@@ -60,7 +60,7 @@ public class PolillaSombra : EnemyBase
         homePosition = transform.position;
 
         if (movement == null)
-            movement = GetComponent<MothMovement>();
+            movement = GetComponent<IEnemyMovement>();
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
         if (animationEventHandler == null)

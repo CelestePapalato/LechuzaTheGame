@@ -16,7 +16,7 @@ public class CercenadorAlado : EnemyBase
     [SerializeField]
     private AnimationEventHandler animationEventHandler;
     [SerializeField]
-    private BirdMovement movement;
+    private IEnemyMovement movement;
 
     [Header("Movement")]
     [SerializeField]
@@ -55,7 +55,7 @@ public class CercenadorAlado : EnemyBase
         homePosition = transform.position;
 
         if (movement == null)
-            movement = GetComponent<BirdMovement>();
+            movement = GetComponent<IEnemyMovement>();
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
         if (animationEventHandler == null)

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BirdMovement : MonoBehaviour
+public class BirdMovement : MonoBehaviour, IEnemyMovement
 {
     [Header("Smoothing")]
     [SerializeField]

@@ -312,16 +312,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25d69d95a6245c44b93d4d3e93bf4a36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetImage: {fileID: 466202955}
   lowestFalloffValue: 0.1
   highestFalloffValue: 0.5
   smoothSpeed: 5
-  falloffProperty: _Falloff
-  targetImage: {fileID: 466202955}
   targetObject: {fileID: 7507083836672885331}
   viewportCamera: {fileID: 1303627026}
   offset: {x: -0.003, y: 0.035}
-  originXProperty: _OriginX
-  originYProperty: _OriginY
   proximityMargin: 0.25
 --- !u!1 &466202952
 GameObject:
@@ -411,16 +408,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25d69d95a6245c44b93d4d3e93bf4a36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetImage: {fileID: 466202955}
   lowestFalloffValue: 0.1
   highestFalloffValue: 0.5
   smoothSpeed: 5
-  falloffProperty: _Falloff
-  targetImage: {fileID: 466202955}
   targetObject: {fileID: 7507083836672885331}
   viewportCamera: {fileID: 1303627026}
   offset: {x: -0.003, y: 0.035}
-  originXProperty: _OriginX
-  originYProperty: _OriginY
   proximityMargin: 0.25
 --- !u!1 &483265622
 GameObject:
@@ -900,7 +894,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &563404268
 Transform:
   m_ObjectHideFlags: 0
@@ -937,7 +931,6 @@ MonoBehaviour:
   baseSpeed: 3
   aggressiveSpeedBonus: 1.5
   aggressiveLightThreshold: 2
-  movement: {fileID: 563404270}
   animator: {fileID: 0}
   animationEventHandler: {fileID: 0}
   damage: {fileID: 1218049013}
@@ -3174,7 +3167,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7823486911999954749, guid: 14280bc9bc9b45444adab27cd04ddf9d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
