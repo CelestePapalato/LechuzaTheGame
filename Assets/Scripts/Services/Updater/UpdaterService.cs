@@ -17,11 +17,13 @@ public class UpdaterService : IService
 
     public void Register(object target)
     {
-        _updater?.Register(target);
+        if (_updater == null) return;
+        _updater.Register(target);
     }
 
     public void Unregister(object target)
     {
-        _updater?.Unregister(target);
+        if (_updater == null) return;
+        _updater.Unregister(target);
     }
 }
